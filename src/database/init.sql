@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS users(user_id SERIAL PRIMARY KEY,
+				  user_name VARCHAR(255) UNIQUE NOT NULL,
+				  email VARCHAR(255) UNIQUE NOT NULL,
+				  password VARCHAR(255) NOT NULL,
+				  first_name VARCHAR(255),
+				  last_name VARCHAR(255),
+				  role VARCHAR(255) DEFAULT 'donor' NOT NULL,
+				  contact_number VARCHAR(255),
+				  address TEXT,
+				  location_longitude DECIMAL(10,8),
+				  location_latitude DECIMAL(10,8))
+
+CREATE TABLE IF NOT EXISTS food_items(food_item_id SERIAL PRIMARY KEY,
+									 name VARCHAR(255) NOT NULL,
+									 description TEXT,
+									 quantity INTEGER NOT NULL,
+									 expiry_date DATE NOT NULL,
+									 dietary_restrictions TEXT,
+									 image_url VARCHAR(255) NOT NULL,
+									 donor_id INTEGER REFERENCES users(user_id))
