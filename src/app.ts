@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import express from 'express';
 import { NODE_ENV, PORT } from '@config';
-import { Routes } from '@interfaces/routes.interface';
+import { IRoutes } from '@interfaces/routes.interface';
 import cors from 'cors';
 import { client } from '@database';
 
@@ -10,7 +10,7 @@ export class App {
   public env: string;
   public port: string | number;
 
-  constructor(routes: Routes[]) {
+  constructor(routes: IRoutes[]) {
     this.app = express();
     this.env = NODE_ENV || 'dev';
     this.port = PORT || 3000;
@@ -25,7 +25,7 @@ export class App {
     this.app.use(cors({ origin: '*', credentials: true }));
   }
 
-  private initializeRoutes(routes: Routes[]) {
+  private initializeRoutes(routes: IRoutes[]) {
     routes.forEach(route => {
       this.app.use('/', route.router);
     });
@@ -36,12 +36,6 @@ export class App {
       console.log(`======= ENV: ${this.env} =======`);
       console.log(`🚀 App listening on the port ${this.port}`);
       console.log(`=================================`);
-      const query = 'SELECT * FROM USERS';
-
-      //   (async () => {
-      //     const result = await client.query(query);
-      //     console.log(result.rows);
-      //   })();
     });
   }
 
