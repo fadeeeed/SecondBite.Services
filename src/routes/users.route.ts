@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import { UsersController } from '@/controllers/users.controller';
 import { IRoutes } from '@interfaces/routes.interface';
+import { apiKeyValidationMiddleware } from '@/middlewares/apiKeyValidation.middleware';
 
 export class UsersRoute implements IRoutes {
   public path = '/users';
@@ -11,6 +12,7 @@ export class UsersRoute implements IRoutes {
     this.initializeRoutes();
   }
   private initializeRoutes() {
+    this.router.use(this.path, apiKeyValidationMiddleware);
     this.router.get(this.path, this.users.getUsers);
     this.router.post(`${this.path}/create`, this.users.createUser);
     this.router.get(`${this.path}/find/:user_name`, this.users.getUser);
