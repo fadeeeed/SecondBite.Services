@@ -1,5 +1,5 @@
 # NodeJS Version 16
-FROM node:16.18-buster-slim
+FROM node:18.19-buster-slim
 
 # Copy Dir
 COPY . ./app
