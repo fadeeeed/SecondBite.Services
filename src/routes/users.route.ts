@@ -14,5 +14,6 @@ export class UsersRoute implements IRoutes {
     this.router.get(this.path, this.users.getUsers);
     this.router.post(`${this.path}/create`, this.users.createUser);
     this.router.get(`${this.path}/find/:user_name`, this.users.getUser);
+    this.router.put(`${this.path}/update/:user_name`, this.users.updateUser);
   }
 }

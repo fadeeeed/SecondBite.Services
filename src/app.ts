@@ -4,6 +4,7 @@ import { NODE_ENV, PORT } from '@config';
 import { IRoutes } from '@interfaces/routes.interface';
 import cors from 'cors';
 import { client } from '@database';
+import { ErrorMiddleware } from '@middlewares/error.middleware';
 
 export class App {
   public app: express.Application;
@@ -17,6 +18,7 @@ export class App {
 
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
+    this.app.use(ErrorMiddleware);
   }
 
   private initializeMiddlewares() {

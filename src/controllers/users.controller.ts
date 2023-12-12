@@ -1,7 +1,7 @@
 import { UsersService } from '@/services/users.services';
 import { Container } from 'typedi';
 import { Response, Request, NextFunction } from 'express';
-import { ICreateUser } from '@/interfaces/users.interface';
+import { ICreateUser, IUpdateUser } from '@/interfaces/users.interface';
 
 export class UsersController {
   public user = Container.get(UsersService);
@@ -33,6 +33,17 @@ export class UsersController {
         res.status(404).json({ message: 'User not found' });
       }
       res.status(200).json({ message: 'User found', data: user });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public updateUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const user_name: string = req.params.user_name;
+      const reqBody: IUpdateUser = req.body;
+      const user = await this.user.updateUser(reqBody, user_name);
+      res.status(200).json({ message: 'User updated successfully', data: user });
     } catch (error) {
       next(error);
     }

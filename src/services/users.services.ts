@@ -1,6 +1,6 @@
 import { Service } from 'typedi';
 import pg from '@database';
-import { ICreateUser } from '@/interfaces/users.interface';
+import { ICreateUser, IUpdateUser } from '@/interfaces/users.interface';
 
 @Service()
 export class UsersService {
@@ -33,6 +33,13 @@ export class UsersService {
   public async getUser(user_name: string): Promise<ICreateUser[]> {
     const query = 'SELECT * FROM USERS WHERE user_name = $1';
     const { rows } = await pg.query(query, [user_name]);
+    return rows;
+  }
+
+  public async updateUser(updateData: IUpdateUser, user_name: string): Promise<ICreateUser[]> {
+    const setClause = Object.keys(updateData).map((key, index) => `${key} = '${updateData[key]}'`);
+    const updateQuery = `UPDATE USERS SET ${setClause} WHERE user_name = $1 returning *`;
+    const { rows } = await pg.query(updateQuery, [user_name]);
     return rows;
   }
 }
