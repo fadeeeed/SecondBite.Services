@@ -1,4 +1,4 @@
-import { UsersService } from '@/services/users.services';
+import { UsersService } from '@/services/users.service';
 import { Container } from 'typedi';
 import { Response, Request, NextFunction } from 'express';
 import { ICreateUser, IUpdateUser } from '@/interfaces/users.interface';
