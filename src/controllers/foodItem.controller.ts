@@ -3,9 +3,21 @@ import { Response, Request, NextFunction } from 'express';
 import { FoodItemService } from '@/services/foodItem.service';
 import { ICreateFoodItem, IUpdateFoodItem } from '@/interfaces/foodItem.interface';
 
+/**
+ * Controller class for managing food items.
+ */
 export class FoodItemsController {
+  /**
+   * Instance of the FoodItemService class.
+   */
   public foodItems = Container.get(FoodItemService);
 
+  /**
+   * Retrieves all food items.
+   * @param req - The request object.
+   * @param res - The response object.
+   * @param next - The next function.
+   */
   public getFoodItems = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const foodItems = await this.foodItems.findAllFoodItems();
@@ -15,6 +27,12 @@ export class FoodItemsController {
     }
   };
 
+  /**
+   * Creates a new food item.
+   * @param req - The request object.
+   * @param res - The response object.
+   * @param next - The next function.
+   */
   public createFoodItem = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const reqBody: ICreateFoodItem = req.body;
@@ -25,15 +43,25 @@ export class FoodItemsController {
     }
   };
 
+  /**
+   * Updates an existing food item.
+   * @param req - The request object.
+   * @param res - The response object.
+   * @param next - The next function.
+   */
   public updateFoodItem = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const food_item_id: number = req.params.food_item_id as number;
-      const reqBody: IUpdateFoodItem = req.body;
-      const foodItem = await this.foodItems.updateFoodItem(reqBody, food_item_id);
-      if (foodItem.length === 0) {
-        res.status(404).json({ message: 'Food Item not found' });
+      const food_item_id: number = req.params.food_item_id;
+      if (food_item_id) {
+        const reqBody: IUpdateFoodItem = req.body;
+        const foodItem = await this.foodItems.updateFoodItem(reqBody, food_item_id);
+        if (foodItem.length === 0) {
+          res.status(404).json({ message: 'Food Item not found' });
+          return;
+        }
+        res.status(200).json({ message: 'Food Item updated successfully', data: foodItem });
       }
-      res.status(200).json({ message: 'Food Item updated successfully', data: foodItem });
+      next(new Error('food_item_id not provided'));
     } catch (error) {
       next(error);
     }

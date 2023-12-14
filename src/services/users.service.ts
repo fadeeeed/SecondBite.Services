@@ -4,7 +4,7 @@ import { ICreateUser, IUpdateUser } from '@/interfaces/users.interface';
 
 @Service()
 export class UsersService {
-  public async findAllUsers(): Promise<any> {
+  public async findAllUsers(): Promise<ICreateUser[]> {
     const { rows } = await pg.query('SELECT * FROM USERS');
     return rows;
   }

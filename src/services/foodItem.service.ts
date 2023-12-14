@@ -4,7 +4,7 @@ import { ICreateFoodItem, IUpdateFoodItem } from '@/interfaces/foodItem.interfac
 
 @Service()
 export class FoodItemService {
-  public async findAllFoodItems(): Promise<ICreateFoodItem> {
+  public async findAllFoodItems(): Promise<ICreateFoodItem[]> {
     const query = 'SELECT * FROM food_items';
     const { rows } = await pg.query(query);
     return rows;
@@ -28,7 +28,6 @@ export class FoodItemService {
   public async updateFoodItem(foodItem: IUpdateFoodItem, food_item_id: number): Promise<ICreateFoodItem[]> {
     const setClause = Object.keys(foodItem).map((key, index) => `${key} = '${foodItem[key]}'`);
     const updateQuery = `UPDATE FOOD_ITEMS SET ${setClause} WHERE food_item_id = $1 returning *`;
-    console.log(updateQuery);
     const { rows } = await pg.query(updateQuery, [food_item_id]);
     return rows;
   }
