@@ -3,7 +3,7 @@ import express from 'express';
 import { NODE_ENV, PORT } from '@config';
 import { IRoutes } from '@interfaces/routes.interface';
 import cors from 'cors';
-import { client } from '@database';
+import helmet from 'helmet';
 import { ErrorMiddleware } from '@middlewares/error.middleware';
 
 export class App {
@@ -22,9 +22,10 @@ export class App {
   }
 
   private initializeMiddlewares() {
+    this.app.use(helmet());
+    this.app.use(cors({ origin: '*', credentials: true }));
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
-    this.app.use(cors({ origin: '*', credentials: true }));
   }
 
   private initializeRoutes(routes: IRoutes[]) {

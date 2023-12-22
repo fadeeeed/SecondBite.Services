@@ -1,3 +1,7 @@
+/**
+ * Imports dotenv and configures it to load environment variables from .env file.
+ * Exports environment variables from process.env as constants.
+ */
 import { config } from 'dotenv';
 
 config({ path: `.env` });
