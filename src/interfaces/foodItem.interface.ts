@@ -5,7 +5,6 @@ export interface ICreateFoodItem {
   expiry_date: Date;
   dietary_restrictions?: string;
   image_url: string;
-  donor_id: number;
 }
 
 export interface IUpdateFoodItem {
@@ -15,5 +14,4 @@ export interface IUpdateFoodItem {
   expiry_date?: Date;
   dietary_restrictions?: string;
   image_url?: string;
-  donor_id: number;
 }

@@ -2,10 +2,12 @@ import { Container } from 'typedi';
 import { Response, Request, NextFunction } from 'express';
 import { FoodItemService } from '@/services/foodItem.service';
 import { ICreateFoodItem, IUpdateFoodItem } from '@/interfaces/foodItem.interface';
-import { Verify } from 'jsonwebtoken';
+import { verify } from 'jsonwebtoken';
 import { X_API_KEY } from '@/config';
 import { getAuthorization } from '@/middlewares/auth.middleware';
 import { DataStoredInToken } from '@/interfaces/auth.interface';
+import { create } from 'ts-node';
+import { createFoodItemSchema } from '@/utils/schemas';
 
 /**
  * Controller class for managing food items.
@@ -40,10 +42,17 @@ export class FoodItemsController {
   public createFoodItem = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const token = getAuthorization(req);
-      const { role } = (await Verify(token, X_API_KEY)) as DataStoredInToken;
-      if (role === 'donor') res.status(403).json({ message: 'Donor is not allowed to access this resource ' });
-      const reqBody: ICreateFoodItem = req.body;
-      const foodItem = await this.foodItems.createFoodItem(reqBody);
+      const { role, id } = (await verify(token, X_API_KEY)) as DataStoredInToken;
+      if (role === 'recipient') {
+        res.status(403).json({ message: 'Recipient is not allowed to access this resource' });
+        return;
+      }
+
+      const { error, value } = createFoodItemSchema.validate(req.body);
+      if (error) {
+        res.status(400).json({ message: 'Invalid request body', error: error.details });
+      }
+      const foodItem = await this.foodItems.createFoodItem(value, id);
       res.status(200).json({ message: 'Food Item created successfully', data: foodItem });
     } catch (error) {
       next(error);

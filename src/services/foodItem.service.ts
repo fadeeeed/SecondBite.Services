@@ -10,7 +10,7 @@ export class FoodItemService {
     return rows;
   }
 
-  public async createFoodItem(foodItem: ICreateFoodItem): Promise<ICreateFoodItem[]> {
+  public async createFoodItem(foodItem: ICreateFoodItem, donor_id: number): Promise<ICreateFoodItem[]> {
     const query =
       'INSERT INTO food_items (name, description, quantity, expiry_date, dietary_restrictions, image_url, donor_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *';
     const values = [
@@ -20,7 +20,7 @@ export class FoodItemService {
       foodItem.expiry_date,
       foodItem.dietary_restrictions,
       foodItem.image_url,
-      foodItem.donor_id,
+      donor_id,
     ];
     const { rows } = await pg.query(query, values);
     return rows;
