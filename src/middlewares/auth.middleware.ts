@@ -5,7 +5,7 @@ import { verify } from 'jsonwebtoken';
 import pg from '@database';
 import { HttpExpection } from '@/exceptions/httpException';
 
-const getAuthorization = (req: Request) => {
+export const getAuthorization = (req: Request) => {
   const cookie = req.cookies?.Authorization;
   if (cookie) return cookie;
 
@@ -27,7 +27,6 @@ const getAuthorization = (req: Request) => {
  */
 export const AuthMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    console.log({ req: req });
     const Authorization = getAuthorization(req);
     if (Authorization) {
       const { UserName, Email, Role } = (await verify(Authorization, X_API_KEY)) as DataStoredInToken;

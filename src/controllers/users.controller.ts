@@ -77,7 +77,6 @@ export class UsersController {
     try {
       const user_name: string = req.params.user_name;
       if (user_name) {
-        console.log(req.params);
         const reqBody: IUpdateUser = req.body;
         const user = await this.user.updateUser(reqBody, user_name);
         res.status(200).json({ message: 'User updated successfully', data: user });

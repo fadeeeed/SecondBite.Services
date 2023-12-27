@@ -20,7 +20,7 @@ export class AuthController {
       const reqBody = req.body;
       const cookie = await this.authService.login(reqBody);
       res.setHeader('Set-Cookie', [cookie]);
-      res.status(200).json({ message: 'User logged in successfully' });
+      res.status(200).json({ message: 'User logged in successfully', token: cookie.split(';')[0].split('=')[1] });
     } catch (error) {
       next(error);
     }

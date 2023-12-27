@@ -47,16 +47,15 @@ export class AuthService {
   public async signUp(user: ICreateUser): Promise<User> {
     const { email, password } = user;
     const searchQuery = `SELECT user_id FROM USERS WHERE email = '${email}'`;
-    console.log(searchQuery);
+
     const { rowCount } = await pg.query(searchQuery);
     if (rowCount) throw new HttpExpection(409, 'The email already exists');
 
     const hashedPassword = await hash(password, 10);
-    console.log(hashedPassword);
+
     const createQuery =
       'INSERT INTO USERS(user_name, email, password, role, first_name, last_name, contact_number,address, location_longitude, location_latitude) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning *';
 
-    console.log(createQuery);
     const { rows } = await pg.query(createQuery, [
       user.user_name,
       user.email,
