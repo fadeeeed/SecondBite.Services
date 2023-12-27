@@ -18,3 +18,14 @@ CREATE TABLE IF NOT EXISTS food_items(food_item_id SERIAL PRIMARY KEY,
 									 dietary_restrictions TEXT,
 									 image_url VARCHAR(255) NOT NULL,
 									 donor_id INTEGER REFERENCES users(user_id))
+
+CREATE TABLE IF NOT EXISTS donations(donation_id SERIAL PRIMARY KEY,
+									food_item_id INTEGER REFERENCES food_items(food_item_id) NOT NULL,
+									donor_id INTEGER REFERENCES users(user_id) NOT NULL,
+									recipient_id INTEGER REFERENCES users(user_id) NOT NULL,
+									quantity INTEGER NOT NULL,
+									 request_time TIMESTAMP WITH TIMEZONE NOT NULL,
+									 confirmation_time TIMESTAMP WITH TIMEZONE,
+									 pickup_time TIMESTAMP WITH TIMEZONE,
+									 status text DEFAULT 'requested' NOT NULL
+									)
