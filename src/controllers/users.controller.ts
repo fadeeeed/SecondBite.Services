@@ -54,7 +54,7 @@ export class UsersController {
       const user_name: string = req.params.user_name;
       if (user_name) {
         const user = await this.user.getUser(user_name);
-        if (user.length === 0) {
+        if (user === null) {
           res.status(404).json({ message: 'User not found' });
           return;
         }

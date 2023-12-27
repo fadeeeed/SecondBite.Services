@@ -17,7 +17,7 @@ import { X_API_KEY } from '@/config';
  * Returns a TokenData object containing the generated token and expiration time.
  */
 const createToken = (user: User): TokenData => {
-  const dataStoredInToken: DataStoredInToken = { UserName: user.user_name, Email: user.email, Role: user.role };
+  const dataStoredInToken: DataStoredInToken = { user_name: user.user_name, email: user.email, role: user.role, id: user.user_id };
   const expiresIn: number = 60 * 60 * 6;
   return { expiresIn, token: sign(dataStoredInToken, X_API_KEY, { expiresIn }) };
 };

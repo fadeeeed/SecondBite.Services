@@ -29,8 +29,8 @@ export const AuthMiddleware = async (req: Request, res: Response, next: NextFunc
   try {
     const Authorization = getAuthorization(req);
     if (Authorization) {
-      const { UserName, Email, Role } = (await verify(Authorization, X_API_KEY)) as DataStoredInToken;
-      const searchQuery = `SELECT * FROM users WHERE user_name = '${UserName}' AND email = '${Email}' AND role = '${Role}'`;
+      const { user_name, email, role } = (await verify(Authorization, X_API_KEY)) as DataStoredInToken;
+      const searchQuery = `SELECT * FROM users WHERE user_name = '${user_name}' AND email = '${email}' AND role = '${role}'`;
       const { rowCount } = await pg.query(searchQuery);
       if (!rowCount) next(new HttpExpection(401, 'Unauthorized'));
       else next();
