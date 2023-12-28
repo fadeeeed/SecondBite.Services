@@ -2,6 +2,10 @@ import { UsersService } from '@/services/users.service';
 import { Container } from 'typedi';
 import { Response, Request, NextFunction } from 'express';
 import { ICreateUser, IUpdateUser } from '@/interfaces/users.interface';
+import { verify } from 'jsonwebtoken';
+import { X_API_KEY } from '@/config';
+import { getAuthorization } from '@/middlewares/auth.middleware';
+import { DataStoredInToken } from '@/interfaces/auth.interface';
 
 /**
  * Controller class for managing user-related operations.
@@ -20,6 +24,12 @@ export class UsersController {
    */
   public getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
+      const token = getAuthorization(req);
+      const { role } = (await verify(token, X_API_KEY)) as DataStoredInToken;
+      if (role !== 'admin') {
+        res.status(403).json({ message: `Don't have enough permission to access the resource` });
+        return;
+      }
       const users = await this.user.findAllUsers();
       res.status(200).json({ message: 'findAll', data: users });
     } catch (error) {
