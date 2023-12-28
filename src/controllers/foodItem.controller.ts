@@ -25,7 +25,7 @@ export class FoodItemsController {
   public getFoodItems = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const foodItems = await this.foodItems.findAllFoodItems();
-      res.status(200).json({ message: 'findAll', data: foodItems });
+      res.status(200).json({ message: 'findAll', count: foodItems.length, data: foodItems });
     } catch (error) {
       next(error);
     }

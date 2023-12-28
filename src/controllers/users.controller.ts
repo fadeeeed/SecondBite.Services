@@ -31,7 +31,7 @@ export class UsersController {
         return;
       }
       const users = await this.user.findAllUsers();
-      res.status(200).json({ message: 'findAll', data: users });
+      res.status(200).json({ message: 'findAll', count: users.length, data: users });
     } catch (error) {
       next(error);
     }
