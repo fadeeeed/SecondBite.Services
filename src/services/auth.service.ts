@@ -46,9 +46,9 @@ export class AuthService {
    */
   public async signUp(user: ICreateUser): Promise<User> {
     const { email, password } = user;
-    const searchQuery = `SELECT user_id FROM USERS WHERE email = '${email}'`;
+    const searchQuery = `SELECT user_id FROM USERS WHERE email = $1`;
 
-    const { rowCount } = await pg.query(searchQuery);
+    const { rowCount } = await pg.query(searchQuery, [email]);
     if (rowCount) throw new HttpExpection(409, 'The email already exists');
 
     const hashedPassword = await hash(password, 10);
