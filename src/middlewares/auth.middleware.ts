@@ -38,6 +38,7 @@ export const AuthMiddleware = async (req: Request, res: Response, next: NextFunc
       next(new HttpExpection(404, 'Authorization token not found'));
     }
   } catch (error) {
-    next(error);
+    if (error.message === 'jwt expired') next(new HttpExpection(401, 'Token expired'));
+    else next(error);
   }
 };
